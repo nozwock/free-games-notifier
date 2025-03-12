@@ -4,13 +4,10 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 authors = [
-    { name = "nozwock", email = "57829219+nozwock@users.noreply.github.com" }
+    { name = "nozwock", email = "57829219+nozwock@users.noreply.github.com" },
 ]
 requires-python = ">=3.13"
-dependencies = [
-    "apprise>=1.9.2",
-    "urllib3>=2.3.0",
-]
+dependencies = ["apprise>=1.9.2", "dynaconf>=3.2.10", "urllib3>=2.3.0"]
 
 [project.scripts]
 free-games-notifier = "free_games_notifier:main"
