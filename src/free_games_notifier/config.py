@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from dynaconf import Dynaconf, Validator
 
 settings = Dynaconf(
@@ -5,9 +7,14 @@ settings = Dynaconf(
     settings_files=["settings.toml", ".secrets.toml"],
     validators=[
         Validator(
-            "AppriseUrls",  # FGN_APPRISEURLS as an envvar
+            "apprise_urls",  # FGN_APPRISEURLS as an envvar
             is_type_of=list,
             required=True,
-        )
+        ),
+        Validator(
+            "notif_history",
+            cast=Path,
+            required=True,
+        ),
     ],
 )

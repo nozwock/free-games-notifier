@@ -86,6 +86,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "apprise" },
+    { name = "click" },
     { name = "dynaconf" },
     { name = "urllib3" },
 ]
@@ -93,6 +94,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "apprise", specifier = ">=1.9.2" },
+    { name = "click", specifier = ">=8.1.8" },
     { name = "dynaconf", specifier = ">=3.2.10" },
     { name = "urllib3", specifier = ">=2.3.0" },
 ]
