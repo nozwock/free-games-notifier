@@ -11,7 +11,8 @@ dependencies = [
     "apprise>=1.9.2",
     "click>=8.1.8",
     "dynaconf>=3.2.10",
-    "urllib3>=2.3.0",
+    "fake-useragent>=2.1.0",
+    "requests>=2.32.3",
 ]
 
 [project.scripts]
@@ -20,3 +21,8 @@ free-games-notifier = "free_games_notifier:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "types-requests>=2.32.0.20250306",
+]

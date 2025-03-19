@@ -81,6 +81,15 @@ wheels = [
 ]
 
 [[package]]
+name = "fake-useragent"
+version = "2.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/99/32/5b400819e6c4a71491f6a48723db8412bb057bf800d63d653b1641bd2bde/fake_useragent-2.1.0.tar.gz", hash = "sha256:cbb2cde0512ecefec1e6175e59d8bcc5cd94af25161432860769a4f3767ad62c", size = 124873 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9f/9e/1ed0964081abafb530173f68f9182a98aa2d82550cc843e1f7c844bc06e7/fake_useragent-2.1.0-py3-none-any.whl", hash = "sha256:1363d8be4934627f80a84c21cce72d33c5da650a9f1fd7398520b1edb6ecd873", size = 125764 },
+]
+
+[[package]]
 name = "free-games-notifier"
 version = "0.1.0"
 source = { editable = "." }
@@ -88,7 +97,13 @@ dependencies = [
     { name = "apprise" },
     { name = "click" },
     { name = "dynaconf" },
-    { name = "urllib3" },
+    { name = "fake-useragent" },
+    { name = "requests" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "types-requests" },
 ]
 
 [package.metadata]
@@ -96,8 +111,12 @@ requires-dist = [
     { name = "apprise", specifier = ">=1.9.2" },
     { name = "click", specifier = ">=8.1.8" },
     { name = "dynaconf", specifier = ">=3.2.10" },
-    { name = "urllib3", specifier = ">=2.3.0" },
+    { name = "fake-useragent", specifier = ">=2.1.0" },
+    { name = "requests", specifier = ">=2.32.3" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "types-requests", specifier = ">=2.32.0.20250306" }]
 
 [[package]]
 name = "idna"
@@ -169,6 +188,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/42/f2/05f29bc3913aea15eb670be136045bf5c5bbf4b99ecb839da9b422bb2c85/requests-oauthlib-2.0.0.tar.gz", hash = "sha256:b3dffaebd884d8cd778494369603a9e7b58d29111bf6b41bdc2dcd87203af4e9", size = 55650 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/3b/5d/63d4ae3b9daea098d5d6f5da83984853c1bbacd5dc826764b249fe119d24/requests_oauthlib-2.0.0-py2.py3-none-any.whl", hash = "sha256:7dd8a5c40426b779b0868c404bdef9768deccf22749cde15852df527e6269b36", size = 24179 },
+]
+
+[[package]]
+name = "types-requests"
+version = "2.32.0.20250306"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "urllib3" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/09/1a/beaeff79ef9efd186566ba5f0d95b44ae21f6d31e9413bcfbef3489b6ae3/types_requests-2.32.0.20250306.tar.gz", hash = "sha256:0962352694ec5b2f95fda877ee60a159abdf84a0fc6fdace599f20acb41a03d1", size = 23012 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/99/26/645d89f56004aa0ba3b96fec27793e3c7e62b40982ee069e52568922b6db/types_requests-2.32.0.20250306-py3-none-any.whl", hash = "sha256:25f2cbb5c8710b2022f8bbee7b2b66f319ef14aeea2f35d80f18c9dbf3b60a0b", size = 20673 },
 ]
 
 [[package]]
