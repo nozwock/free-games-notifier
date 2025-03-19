@@ -16,7 +16,7 @@ from .config import settings
     help="Where the notification history should be stored. It's used to not send the same notification multiple times",
 )
 def cli(apprise_url, notif_history):
-    settings.update(
+    settings.__dict__.update(
         {
             k: v
             for k, v in {
