@@ -1,8 +1,16 @@
+from logging import getLogger
 from pathlib import Path
 
 import click
 
+from free_games_notifier import crawlers
+from free_games_notifier.crawlers.log import setup_logging
+
 from .config import settings
+
+setup_logging()
+
+logger = getLogger()
 
 
 @click.command()
@@ -26,6 +34,14 @@ def cli(apprise_url, notif_history):
             if v
         }
     )
+
+    from pprint import pprint
+
+    for crawler in map(lambda it: it(), crawlers.get_all_crawlers()):
+        try:
+            pprint(crawler.crawl())
+        except Exception as e:
+            logger.error(e)
 
     # print(settings.apprise_urls)
     # print(settings.notif_history)
