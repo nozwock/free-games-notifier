@@ -17,8 +17,6 @@ from free_games_notifier.model import GameOffer
 
 from .config import settings
 
-setup_logging()
-
 logger = getLogger()
 
 
@@ -44,12 +42,15 @@ def cli(apprise_url, notif_history):
         }
     )
 
+    setup_logging(cast(str, settings.loglevel))
+
     server_list = deepcopy(cast(list[str], list(settings.apprise_urls)))  # pyright: ignore
     set_server_list_defaults(server_list)
 
     game_offers: list[GameOffer] = []
     for crawler in map(lambda it: it(), crawlers.get_all_crawlers()):
         try:
+            logger.info(f"Running crawler from {type(crawler).__name__!r}")
             if game_offer := crawler.crawl():
                 game_offers.extend(game_offer)
         except Exception as e:

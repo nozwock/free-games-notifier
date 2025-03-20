@@ -16,5 +16,10 @@ settings = Dynaconf(
             cast=Path,
             required=True,
         ),
+        Validator(
+            "loglevel",  # FGN_LOGLEVEL
+            cast=lambda s: s.upper(),
+            required=True,
+        ),
     ],
 )

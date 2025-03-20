@@ -2,9 +2,8 @@ import logging
 import sys
 
 
-def setup_logging():
+def setup_logging(loglevel: str | None = None):
     logging.basicConfig(stream=sys.stderr)
 
     root = logging.getLogger()
-    # todo: get log level from env
-    root.setLevel(logging.DEBUG)
+    root.setLevel(loglevel if loglevel else logging.INFO)
