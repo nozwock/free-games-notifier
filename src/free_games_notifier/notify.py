@@ -1,4 +1,4 @@
-from free_games_notifier.crawlers.utils import add_query_params, get_url_schema
+from free_games_notifier.utils import add_query_params, get_url_schema
 
 
 def set_server_list_defaults(servers: list[str]) -> list[str]:

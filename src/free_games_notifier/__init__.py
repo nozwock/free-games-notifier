@@ -7,13 +7,13 @@ import apprise
 import click
 
 from free_games_notifier import crawlers
-from free_games_notifier.crawlers.log import setup_logging
-from free_games_notifier.crawlers.notify import (
+from free_games_notifier.log import setup_logging
+from free_games_notifier.model import GameOffer
+from free_games_notifier.notify import (
     set_server_list_defaults,
     set_server_list_notify_params,
 )
-from free_games_notifier.crawlers.utils import storefront_fmt
-from free_games_notifier.model import GameOffer
+from free_games_notifier.utils import storefront_fmt
 
 from .config import settings
 
