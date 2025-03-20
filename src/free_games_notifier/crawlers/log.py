@@ -6,4 +6,5 @@ def setup_logging():
     logging.basicConfig(stream=sys.stderr)
 
     root = logging.getLogger()
-    root.setLevel(logging.INFO)
+    # todo: get log level from env
+    root.setLevel(logging.DEBUG)
