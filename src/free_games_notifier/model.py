@@ -1,8 +1,11 @@
 from abc import abstractmethod
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Literal, Protocol
 
 OFFER_END_FMT_PATTERN = "%d %b %Y %H:%M UTC"
+
+
+type PlatformStr = Literal["epicgames"]
 
 
 @dataclass
@@ -11,7 +14,7 @@ class GameOffer:
     `offer_end_fmt` should be in some human readable format like, `%d %b %Y %H:%M UTC`.
     """
 
-    platform: str
+    platform: PlatformStr
     offer_type: str
     url: str
     title: str

@@ -1,16 +1,16 @@
 import datetime
-from typing import Iterable, cast
+from typing import Iterable, assert_never, cast
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
-from free_games_notifier.model import OFFER_END_FMT_PATTERN
+from free_games_notifier.model import OFFER_END_FMT_PATTERN, PlatformStr
 
 
-def storefront_fmt(storefront: str) -> str:
+def storefront_fmt(storefront: PlatformStr) -> str:
     match storefront:
         case "epicgames":
             return "Epic Games"
         case _:
-            raise NotImplementedError
+            assert_never(storefront)
 
 
 def get_offer_end_fmt_date(timestamp: float) -> str:
