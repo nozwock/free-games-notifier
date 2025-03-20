@@ -5,7 +5,7 @@ requires-python = ">=3.13"
 [[package]]
 name = "apprise"
 version = "1.9.2"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/nozwock/apprise?rev=61c3f06797e8da571829ad51b33c908213afd743#61c3f06797e8da571829ad51b33c908213afd743" }
 dependencies = [
     { name = "certifi" },
     { name = "click" },
@@ -13,10 +13,6 @@ dependencies = [
     { name = "pyyaml" },
     { name = "requests" },
     { name = "requests-oauthlib" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/09/b9/77582f557b5b5fcfea85ff2e1c5708a848a98ce368db001ce37c5d7cc758/apprise-1.9.2.tar.gz", hash = "sha256:290eb1217028dd5040802371494d70c1bcab907e6634a77c263489dbe4fd73a8", size = 1779362 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/60/68/cd315a9e94a4d5bd9b7b2b239bd7efd49f0527d172c663f65210107c6b6f/apprise-1.9.2-py3-none-any.whl", hash = "sha256:52bd580058d8534b204bfc9ca53b5810c6a935d1bed7c463147e244b2c93362b", size = 1339898 },
 ]
 
 [[package]]
@@ -108,7 +104,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "apprise", specifier = ">=1.9.2" },
+    { name = "apprise", git = "https://github.com/nozwock/apprise?rev=61c3f06797e8da571829ad51b33c908213afd743" },
     { name = "click", specifier = ">=8.1.8" },
     { name = "dynaconf", specifier = ">=3.2.10" },
     { name = "fake-useragent", specifier = ">=2.1.0" },
