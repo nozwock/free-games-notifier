@@ -1,9 +1,10 @@
+from datetime import datetime
 from logging import getLogger
 
 import fake_useragent
 import requests
 
-from free_games_notifier.model import GameOffer, ICrawler
+from free_games_notifier.model import OFFER_END_FMT_PATTERN, GameOffer, ICrawler
 
 logger = getLogger(__name__)
 
@@ -18,6 +19,9 @@ class EpicGamesCrawler(ICrawler):
         self.user_agent = fake_useragent.UserAgent(os="Windows").chrome
 
     def crawl(self) -> list[GameOffer] | None:
+        def parse_epic_games_datetime(time: str) -> datetime:
+            return datetime.strptime(time, "%Y-%m-%dT%H:%M:%S.%fZ")
+
         resp = requests.get(
             self.offer_list_url, headers={"User-Agent": self.user_agent}
         )
@@ -54,6 +58,16 @@ class EpicGamesCrawler(ICrawler):
                     except Exception:
                         pass
 
+                    offer_end_date = parse_epic_games_datetime(
+                        next(
+                            iter(
+                                next(
+                                    iter(game_offer["promotions"]["promotionalOffers"])
+                                )["promotionalOffers"]
+                            )
+                        )["endDate"]
+                    )
+
                     offer_list.append(
                         GameOffer(
                             platform="epicgames",
@@ -78,17 +92,10 @@ class EpicGamesCrawler(ICrawler):
                             original_price_fmt=game_offer["price"]["totalPrice"][
                                 "fmtPrice"
                             ]["originalPrice"],
-                            offer_end=next(
-                                iter(
-                                    next(
-                                        iter(
-                                            game_offer["promotions"][
-                                                "promotionalOffers"
-                                            ]
-                                        )
-                                    )["promotionalOffers"]
-                                )
-                            )["endDate"],
+                            offer_end_unix=offer_end_date.timestamp(),
+                            offer_end_fmt=offer_end_date.strftime(
+                                OFFER_END_FMT_PATTERN
+                            ),
                         )
                     )
             except Exception as e:
