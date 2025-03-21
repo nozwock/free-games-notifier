@@ -49,14 +49,26 @@ class EpicGamesCrawler(ICrawler):
                     game_offer["price"]["totalPrice"]["discountPrice"] == 0
                 )
                 if is_offer_active:
-                    page_slug = next(iter(game_offer["catalogNs"]["mappings"]))[
-                        "pageSlug"
-                    ]
+                    page_slug = None
                     try:
                         # May note be present
-                        page_slug = next(iter(game_offer["offerMappings"]))["pageSlug"]
+                        page_slug = next(iter(game_offer["catalogNs"]["mappings"]))[
+                            "pageSlug"
+                        ]
+                        page_slug = next(
+                            iter(game_offer["offerMappings"])
+                        )[
+                            "pageSlug"
+                        ]  # More priority since it's the correct one when both are present
                     except Exception:
                         pass
+
+                    if page_slug is None:
+                        logger.warning(
+                            f"Couldn't find the page slug, it's likely a Mystery Game, title={game_offer['title']!r}"
+                        )
+                        logger.debug(game_offer)
+                        continue
 
                     offer_end_date = parse_epic_games_datetime(
                         next(
