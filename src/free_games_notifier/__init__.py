@@ -2,7 +2,6 @@ import datetime
 from copy import deepcopy
 from logging import getLogger
 from pathlib import Path
-from pprint import pprint
 from typing import cast
 
 import apprise

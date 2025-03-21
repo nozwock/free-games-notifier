@@ -67,7 +67,7 @@ class EpicGamesCrawler(ICrawler):
                         logger.warning(
                             f"Couldn't find the page slug, it's likely a Mystery Game, title={game_offer['title']!r}"
                         )
-                        logger.debug(game_offer)
+                        logger.debug(f"game_offer={game_offer}")
                         continue
 
                     offer_end_date = parse_epic_games_datetime(
