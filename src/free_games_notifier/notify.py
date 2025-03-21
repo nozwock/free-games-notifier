@@ -5,7 +5,9 @@ def set_server_list_defaults(servers: list[str]) -> list[str]:
     for i, server in enumerate(servers):
         match get_url_schema(server):
             case "ntfy":
-                servers[i] = add_query_params(server, {"image": "False"})
+                servers[i] = add_query_params(
+                    server, {"image": "False", "priority": "max"}
+                )
             case _:
                 # todo:
                 pass
