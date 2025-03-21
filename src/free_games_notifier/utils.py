@@ -22,6 +22,15 @@ def get_url_schema(url: str) -> str:
     return urlparse(url).scheme
 
 
+def strip_query_params(url: str) -> str:
+    url_parts = urlparse(url)._asdict()
+    url_parts["params"] = ""
+    url_parts["query"] = ""
+    url_parts["fragment"] = ""
+
+    return cast(str, urlunparse(url_parts.values()))
+
+
 def add_query_params(
     url: str, params: Iterable[tuple[str, str | None]] | dict[str, str | None]
 ) -> str:

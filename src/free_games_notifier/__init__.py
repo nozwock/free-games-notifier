@@ -1,19 +1,22 @@
+import datetime
 from copy import deepcopy
 from logging import getLogger
 from pathlib import Path
+from pprint import pprint
 from typing import cast
 
 import apprise
 import click
 
 from free_games_notifier import crawlers
+from free_games_notifier.history import NotificationHistory
 from free_games_notifier.log import setup_logging
 from free_games_notifier.model import GameOffer
 from free_games_notifier.notify import (
     set_server_list_defaults,
     set_server_list_notify_params,
 )
-from free_games_notifier.utils import storefront_fmt
+from free_games_notifier.utils import storefront_fmt, strip_query_params
 
 from .config import settings
 
@@ -56,16 +59,52 @@ def cli(apprise_url, notif_history):
         except Exception as e:
             logger.error(e)
 
+    notification_history = (
+        from_file
+        if (
+            from_file := NotificationHistory.from_file(
+                cast(Path, settings.notif_history)
+            )
+        )
+        else NotificationHistory()
+    )
+
+    def process_notif_config(game_offer: GameOffer, server_url: str) -> bool:
+        if notification_history.exists(game_offer.platform, server_url, game_offer.url):
+            logger.info(
+                f"Skipping already sent notification with this configuration, platform={game_offer.platform!r} server_url={strip_query_params(server_url)!r} game_url={game_offer.url!r}"
+            )
+            return False
+
+        notification_history.add_history(
+            game_offer.platform,
+            server_url,
+            game_offer.url,
+            datetime.datetime.now(datetime.UTC).replace(microsecond=0).timestamp(),
+        )
+        return True
+
+    # todo: make ignoring already sent notifications optional
     for game_offer in game_offers:
-        app_obj = apprise.Apprise()
         # Need to do this for each notification as the Game URL etc are different
-        notif_server_list = set_server_list_notify_params(
-            deepcopy(server_list),
-            click_action=game_offer.url,
-            image_url=game_offer.image_url,
+        notif_server_list = list(
+            filter(
+                # Ignoring already sent notifications and adding the rest to history
+                lambda it: process_notif_config(game_offer, it),  # pyright: ignore ; Type checker is choking in a weird way here
+                set_server_list_notify_params(
+                    deepcopy(server_list),
+                    click_action=game_offer.url,
+                    image_url=game_offer.image_url,
+                ),
+            )
         )
         logger.debug(f"{game_offer!r}")
-        logger.debug(f"Server List: {notif_server_list!r}")
+        logger.debug(f"Servers to notify: {notif_server_list!r}")
+
+        if not notif_server_list:
+            continue
+
+        app_obj = apprise.Apprise()
         app_obj.add(notif_server_list)
 
         logger.info(f"Sending notification for {game_offer.title!r}")
@@ -76,7 +115,7 @@ def cli(apprise_url, notif_history):
         if not ok:
             logger.error(f"Failed to send notification for {game_offer.title!r}")
 
-    # print(settings.notif_history)
+    notification_history.store_to_file(cast(Path, settings.notif_history))
 
 
 def main() -> None:
