@@ -9,6 +9,7 @@ from apprise import logger
 from pydantic.v1.utils import deep_update
 
 from free_games_notifier.model import (
+    GameOffer,
     NotificationHistoryV1,
     NotificationHistoryV1Validator,
     PlatformStr,
@@ -54,20 +55,23 @@ class NotificationHistory:
             return False
 
     def add_history(
-        self, platform: PlatformStr, server_url: str, game_url: str, sent_on_unix: float
+        self, server_url: str, game_offer: GameOffer, notified_at_unix: float
     ):
         server_url = strip_query_params(server_url)
         logger.debug(
-            f"{self!r} Adding to notification history, platform={platform!r} server_url={server_url!r} game_url={game_url!r}"
+            f"{self!r} Adding to notification history, platform={game_offer.platform!r} server_url={server_url!r} game_title={game_offer.title!r} game_url={game_offer.url!r}"
         )
         self.model["history"] = deep_update(
             self.model["history"],
             {
-                platform: {
+                game_offer.platform: {
                     server_url: {
-                        game_url: datetime.datetime.fromtimestamp(
-                            sent_on_unix, datetime.UTC
-                        ).isoformat()
+                        game_offer.url: {
+                            "title": game_offer.title,
+                            "notified_at": datetime.datetime.fromtimestamp(
+                                notified_at_unix, datetime.UTC
+                            ).isoformat(),
+                        }
                     }
                 }
             },

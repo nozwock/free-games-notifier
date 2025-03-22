@@ -27,15 +27,19 @@ class GameOffer:
     offer_end_fmt: str
 
 
+class HistoryDetailV1(TypedDict):
+    title: str
+    notified_at: str
+
+
 type ServerUrl = str
 type GameUrl = str
-type NotificationSentTime = str
-type History = dict[PlatformStr, dict[ServerUrl, dict[GameUrl, NotificationSentTime]]]
+type HistoryV1 = dict[PlatformStr, dict[ServerUrl, dict[GameUrl, HistoryDetailV1]]]
 
 
 class NotificationHistoryV1(TypedDict):
     version: int
-    history: History
+    history: HistoryV1
 
 
 NotificationHistoryV1Validator = TypeAdapter(NotificationHistoryV1)

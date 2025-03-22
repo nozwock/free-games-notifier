@@ -80,9 +80,8 @@ def cli(apprise_url, notif_history):
             return False
 
         notification_history.add_history(
-            game_offer.platform,
             server_url,
-            game_offer.url,
+            game_offer,
             datetime.datetime.now(datetime.UTC).replace(microsecond=0).timestamp(),
         )
         return True
