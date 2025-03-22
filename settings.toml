@@ -1,2 +1,2 @@
-notif_history = ".state/notification-history.json"
+notif_history = ".state/history.json"
 loglevel = "info"

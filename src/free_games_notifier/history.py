@@ -15,7 +15,6 @@ from free_games_notifier.model import (
     NotificationHistoryV1,
     NotificationHistoryV1Validator,
     PlatformStr,
-    ServerUrlHash,
 )
 from free_games_notifier.utils import strip_query_params
 
