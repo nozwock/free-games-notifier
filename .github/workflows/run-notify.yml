@@ -1,0 +1,61 @@
+name: Run Free Games Notifier
+
+on:
+  schedule:
+    - cron: "0 0,12 * * *" # Runs at 00:00 and 12:00 UTC daily on main branch
+  workflow_dispatch:
+
+jobs:
+  run-notify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      FGN_APPRISE_URLS: ${{ vars.FGN_APPRISE_URLS }} # note: Set this in the Github Action Variables section
+      FGN_LOGLEVEL: debug
+      FGN_NOTIF_HISTORY: .state/history.json
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for working with branches
+
+      - name: Try to fetch history state from GitHub Release
+        id: fetch-state
+        uses: dsaltares/fetch-gh-release-asset@1.1.2
+        with:
+          version: tags/state-latest
+          file: history.json
+          target: .state/history.json
+        continue-on-error: true # Prevent failure if the file doesn't exist
+
+      - name: Install uv
+        run: |
+          pipx install uv
+
+      - name: Setup Python with uv
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Cache uv dependencies
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: uv venv --system-site-packages && uv pip install -e .
+
+      - name: Run Free Games Notifier
+        run: uv run free-games-notifier
+
+      - name: Upload state file to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          make_latest: false
+          tag_name: state-latest
+          name: State Latest
+          files: .state/history.json
