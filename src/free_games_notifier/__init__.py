@@ -75,7 +75,9 @@ def cli(apprise_url, notif_history):
     def process_notif_config(game_offer: GameOffer, server_url: str) -> bool:
         if notification_history.exists(game_offer.platform, server_url, game_offer.url):
             logger.info(
-                f"Skipping already sent notification with this configuration, platform={game_offer.platform!r} server_url={strip_query_params(server_url)!r} game_url={game_offer.url!r}"
+                f"Skipping already sent notification with this configuration, platform={game_offer.platform!r} "
+                f"server_url_hash={NotificationHistory.hash_server_url(strip_query_params(server_url))!r} "
+                f"game_title={game_offer.title!r} game_url={game_offer.url!r}"
             )
             return False
 

@@ -32,9 +32,9 @@ class HistoryDetailV1(TypedDict):
     notified_at: str
 
 
-type ServerUrl = str
+type ServerUrlHash = str
 type GameUrl = str
-type HistoryV1 = dict[PlatformStr, dict[ServerUrl, dict[GameUrl, HistoryDetailV1]]]
+type HistoryV1 = dict[PlatformStr, dict[ServerUrlHash, dict[GameUrl, HistoryDetailV1]]]
 
 
 class NotificationHistoryV1(TypedDict):
