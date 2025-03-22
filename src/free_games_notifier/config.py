@@ -7,7 +7,7 @@ settings = Dynaconf(
     settings_files=["settings.toml", ".secrets.toml"],
     validators=[
         Validator(
-            "apprise_urls",  # FGN_APPRISEURLS as an envvar
+            "apprise_urls",  # FGN_APPRISE_URLS as an envvar
             is_type_of=list,
             required=True,
         ),
@@ -20,6 +20,14 @@ settings = Dynaconf(
             "loglevel",  # FGN_LOGLEVEL
             cast=lambda s: s.upper(),
             required=True,
+        ),
+        Validator(
+            "ignore_history",
+            is_type_of=bool,
+        ),
+        Validator(
+            "reset_history",
+            is_type_of=bool,
         ),
     ],
 )

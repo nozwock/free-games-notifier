@@ -33,7 +33,7 @@ logger = getLogger()
     help="Where the notification history should be stored. It's used to not send the same notification multiple times",
 )
 def cli(apprise_url, notif_history):
-    settings.__dict__.update(
+    cast(dict, settings).update(
         {
             k: v
             for k, v in {
@@ -45,6 +45,9 @@ def cli(apprise_url, notif_history):
     )
 
     setup_logging(cast(str, settings.loglevel))
+
+    is_ignore_history = cast(dict, settings).get("ignore_history", False)
+    is_reset_history = cast(dict, settings).get("reset_history", False)
 
     server_list = deepcopy(cast(list[str], list(settings.apprise_urls)))  # pyright: ignore
     set_server_list_defaults(server_list)
@@ -60,7 +63,8 @@ def cli(apprise_url, notif_history):
 
     notification_history = (
         from_file
-        if (
+        if not is_reset_history
+        and (
             from_file := NotificationHistory.from_file(
                 cast(Path, settings.notif_history)
             )
@@ -83,20 +87,23 @@ def cli(apprise_url, notif_history):
         )
         return True
 
-    # todo: make ignoring already sent notifications optional
     for game_offer in game_offers:
         # Need to do this for each notification as the Game URL etc are different
-        notif_server_list = list(
-            filter(
-                # Ignoring already sent notifications and adding the rest to history
-                lambda it: process_notif_config(game_offer, it),  # pyright: ignore ; Type checker is choking in a weird way here
-                set_server_list_notify_params(
-                    deepcopy(server_list),
-                    click_action=game_offer.url,
-                    image_url=game_offer.image_url,
-                ),
-            )
+        notif_server_list = set_server_list_notify_params(
+            deepcopy(server_list),
+            click_action=game_offer.url,
+            image_url=game_offer.image_url,
         )
+
+        if not is_ignore_history:
+            notif_server_list = list(
+                filter(
+                    # Ignoring already sent notifications and adding the rest to history
+                    lambda it: process_notif_config(game_offer, it),  # pyright: ignore ; Type checker is choking in a weird way here
+                    notif_server_list,
+                )
+            )
+
         logger.debug(f"{game_offer!r}")
         logger.debug(f"Servers to notify: {notif_server_list!r}")
 
