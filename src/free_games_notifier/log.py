@@ -2,8 +2,8 @@ import logging
 import sys
 
 
-def setup_logging(loglevel: str | None = None):
+def setup_logging(logger: logging.Logger | None = None, loglevel: str | None = None):
     logging.basicConfig(stream=sys.stderr)
 
-    root = logging.getLogger()
+    root = logger if logger else logging.getLogger()
     root.setLevel(loglevel if loglevel else logging.INFO)

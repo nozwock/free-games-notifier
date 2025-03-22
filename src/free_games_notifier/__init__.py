@@ -19,7 +19,7 @@ from free_games_notifier.utils import storefront_fmt, strip_query_params
 
 from .config import settings
 
-logger = getLogger()
+logger = getLogger(__name__)
 
 
 @click.command()
@@ -44,7 +44,7 @@ def cli(apprise_url, notif_history):
         }
     )
 
-    setup_logging(cast(str, settings.loglevel))
+    setup_logging(logger=logger, loglevel=cast(str, settings.loglevel))
 
     is_ignore_history = cast(dict, settings).get("ignore_history", False)
     is_reset_history = cast(dict, settings).get("reset_history", False)
