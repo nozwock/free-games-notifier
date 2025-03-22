@@ -27,4 +27,5 @@ build-backend = "hatchling.build"
 dev = ["types-requests>=2.32.0.20250306"]
 
 [tool.uv.sources]
+# https://github.com/caronc/apprise/issues/1308
 apprise = { git = "https://github.com/nozwock/apprise", rev = "61c3f06797e8da571829ad51b33c908213afd743" }
