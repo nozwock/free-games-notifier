@@ -7,6 +7,7 @@ on:
 
 jobs:
   run-notify:
+    name: Send Notifications
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -59,3 +60,12 @@ jobs:
           tag_name: state-latest
           name: State Latest
           files: .state/history.json
+
+  keepalive-job:
+    name: Keepalive Workflow
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gautamkrishnar/keepalive-workflow@v2
