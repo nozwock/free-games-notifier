@@ -106,7 +106,7 @@ def cli(apprise_url, notif_history):
             )
 
         logger.debug(f"{game_offer!r}")
-        logger.debug(f"Servers to notify: {notif_server_list!r}")
+        logger.debug(f"Servers to notify: {len(notif_server_list)}")
 
         if not notif_server_list:
             continue
