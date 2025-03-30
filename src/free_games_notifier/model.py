@@ -22,7 +22,6 @@ class GameOffer:
     title: str
     description: str
     image_url: str | None
-    original_price_fmt: str
     offer_start_unix: float
     offer_end_unix: float
     offer_end_fmt: str

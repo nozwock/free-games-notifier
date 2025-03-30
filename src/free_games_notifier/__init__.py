@@ -116,8 +116,8 @@ def cli(apprise_url, notif_history):
 
         logger.info(f"Sending notification for {game_offer.title!r}")
         ok = app_obj.notify(
-            body=f"The item, originally priced at {game_offer.original_price_fmt} is now available for free on {storefront_fmt(game_offer.platform)} for a limited period of time!\n\nThe offer ends on {game_offer.offer_end_fmt}.",
-            title=f"{game_offer.title} is available for Free",
+            body=f"The offer ends on {game_offer.offer_end_fmt}.{f'\n\n{game_offer.description}' if game_offer.description.strip() else ''}",
+            title=f"{game_offer.title!r} is available for Free",
         )
         if not ok:
             logger.error(f"Failed to send notification for {game_offer.title!r}")

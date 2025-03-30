@@ -100,8 +100,6 @@ class EpicGamesCrawler(ICrawler):
                     except Exception:
                         pass
 
-                    # todo: remove original_price_fmt (None) since it's not trustable due to mystery games having 0 as original price
-
                     assert offer_dates is not None
                     assert offer_start_date is not None
                     assert offer_end_date is not None
@@ -118,8 +116,9 @@ class EpicGamesCrawler(ICrawler):
                                 if not (
                                     img_obj := next(
                                         filter(
-                                            lambda it: it["type"].lower()
-                                            == "thumbnail",
+                                            lambda it: it["type"].lower() == "thumbnail"
+                                            or it["type"].lower()
+                                            == "DieselStoreFrontWide".lower(),  # Mystery Games
                                             game_offer["keyImages"],
                                         ),
                                         None,
@@ -127,9 +126,6 @@ class EpicGamesCrawler(ICrawler):
                                 )
                                 else img_obj["url"]
                             ),
-                            original_price_fmt=game_offer["price"]["totalPrice"][
-                                "fmtPrice"
-                            ]["originalPrice"],
                             offer_start_unix=offer_start_date,
                             offer_end_unix=offer_end_date.timestamp(),
                             offer_end_fmt=offer_end_date.strftime(
