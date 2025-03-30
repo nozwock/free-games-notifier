@@ -23,8 +23,14 @@ class GameOffer:
     description: str
     image_url: str | None
     original_price_fmt: str
+    offer_start_unix: float
     offer_end_unix: float
     offer_end_fmt: str
+
+
+type ServerUrlHash = str
+type GameUrl = str
+type OfferStartIso = str  # UTC ISO Format with millisecond set to 0
 
 
 class HistoryDetailV1(TypedDict):
@@ -32,9 +38,10 @@ class HistoryDetailV1(TypedDict):
     notified_at: str
 
 
-type ServerUrlHash = str
-type GameUrl = str
-type HistoryV1 = dict[PlatformStr, dict[ServerUrlHash, dict[GameUrl, HistoryDetailV1]]]
+type HistoryV1 = dict[
+    PlatformStr,
+    dict[ServerUrlHash, dict[GameUrl, dict[OfferStartIso, HistoryDetailV1]]],
+]
 
 
 class NotificationHistoryV1(TypedDict):

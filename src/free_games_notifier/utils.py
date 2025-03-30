@@ -5,6 +5,16 @@ from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 from free_games_notifier.model import OFFER_END_FMT_PATTERN, PlatformStr
 
 
+def unixtime2iso(
+    timestamp: float, tz: datetime.timezone = datetime.UTC, trim_ms: bool = True
+) -> str:
+    date = datetime.datetime.fromtimestamp(timestamp, tz)
+    if trim_ms:
+        date = date.replace(microsecond=0)
+
+    return date.isoformat()
+
+
 def storefront_fmt(storefront: PlatformStr) -> str:
     match storefront:
         case "epicgames":

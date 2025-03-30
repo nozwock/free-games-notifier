@@ -16,7 +16,7 @@ from free_games_notifier.model import (
     NotificationHistoryV1Validator,
     PlatformStr,
 )
-from free_games_notifier.utils import strip_query_params
+from free_games_notifier.utils import strip_query_params, unixtime2iso
 
 
 class NotificationHistory:
@@ -48,12 +48,12 @@ class NotificationHistory:
 
         return history_obj
 
-    def exists(self, platform: PlatformStr, server_url: str, game_url: GameUrl):
+    def exists(self, server_url: str, game_offer: GameOffer):
         server_url = strip_query_params(server_url)
         try:
-            _ = self.model["history"][platform][
+            _ = self.model["history"][game_offer.platform][
                 NotificationHistory.hash_server_url(server_url)
-            ][game_url]
+            ][game_offer.url][unixtime2iso(game_offer.offer_start_unix)]
             return True
         except Exception:
             return False
@@ -76,10 +76,10 @@ class NotificationHistory:
                 game_offer.platform: {
                     server_url_hash: {
                         game_offer.url: {
-                            "title": game_offer.title,
-                            "notified_at": datetime.datetime.fromtimestamp(
-                                notified_at_unix, datetime.UTC
-                            ).isoformat(),
+                            unixtime2iso(game_offer.offer_start_unix): {
+                                "title": game_offer.title,
+                                "notified_at": unixtime2iso(notified_at_unix),
+                            }
                         }
                     }
                 }

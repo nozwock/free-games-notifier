@@ -1,4 +1,5 @@
-from datetime import datetime
+import datetime
+from datetime import datetime as Datetime
 from logging import getLogger
 
 import fake_useragent
@@ -19,8 +20,8 @@ class EpicGamesCrawler(ICrawler):
         self.user_agent = fake_useragent.UserAgent(os="Windows").chrome
 
     def crawl(self) -> list[GameOffer] | None:
-        def parse_epic_games_datetime(time: str) -> datetime:
-            return datetime.strptime(time, "%Y-%m-%dT%H:%M:%S.%fZ")
+        def parse_epic_games_datetime(time: str) -> Datetime:
+            return Datetime.strptime(time, "%Y-%m-%dT%H:%M:%S.%fZ")
 
         resp = requests.get(
             self.offer_list_url, headers={"User-Agent": self.user_agent}
@@ -70,15 +71,22 @@ class EpicGamesCrawler(ICrawler):
                         logger.debug(f"game_offer={game_offer}")
                         continue
 
-                    offer_end_date = parse_epic_games_datetime(
-                        next(
-                            iter(
-                                next(
-                                    iter(game_offer["promotions"]["promotionalOffers"])
-                                )["promotionalOffers"]
-                            )
-                        )["endDate"]
+                    offer_dates = next(
+                        iter(
+                            next(iter(game_offer["promotions"]["promotionalOffers"]))[
+                                "promotionalOffers"
+                            ]
+                        )
                     )
+
+                    offer_start_date = (
+                        parse_epic_games_datetime(offer_dates["startDate"]).timestamp()
+                        if offer_dates.get("startDate", None)
+                        else Datetime.now(datetime.UTC)
+                        .replace(microsecond=0)
+                        .timestamp()
+                    )
+                    offer_end_date = parse_epic_games_datetime(offer_dates["endDate"])
 
                     offer_list.append(
                         GameOffer(
@@ -104,6 +112,7 @@ class EpicGamesCrawler(ICrawler):
                             original_price_fmt=game_offer["price"]["totalPrice"][
                                 "fmtPrice"
                             ]["originalPrice"],
+                            offer_start_unix=offer_start_date,
                             offer_end_unix=offer_end_date.timestamp(),
                             offer_end_fmt=offer_end_date.strftime(
                                 OFFER_END_FMT_PATTERN
