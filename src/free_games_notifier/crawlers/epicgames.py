@@ -1,6 +1,7 @@
 import datetime
 from datetime import datetime as Datetime
 from logging import getLogger
+from typing import cast
 
 import fake_useragent
 import requests
@@ -46,11 +47,46 @@ class EpicGamesCrawler(ICrawler):
 
         for game_offer in game_offers:
             try:
+                offer_dates: dict | None = None
+                offer_start_date: float | None = None
+                offer_end_date: Datetime | None = None
+
+                try:
+                    offer_dates = cast(
+                        dict,
+                        next(
+                            iter(
+                                next(
+                                    iter(game_offer["promotions"]["promotionalOffers"])
+                                )["promotionalOffers"]
+                            )
+                        ),
+                    )
+
+                    if offer_dates is not None:
+                        offer_start_date = (
+                            parse_epic_games_datetime(
+                                offer_dates["startDate"]
+                            ).timestamp()
+                            if offer_dates.get("startDate", None)
+                            else Datetime.now(datetime.UTC)
+                            .replace(microsecond=0)
+                            .timestamp()
+                        )
+                        offer_end_date = parse_epic_games_datetime(
+                            offer_dates["endDate"]
+                        )
+                except Exception:
+                    pass
+
                 is_offer_active = (
                     game_offer["price"]["totalPrice"]["discountPrice"] == 0
+                    and offer_start_date is not None
+                    and Datetime.now(datetime.UTC)
+                    >= Datetime.fromtimestamp(offer_start_date, datetime.UTC)
                 )
                 if is_offer_active:
-                    page_slug = None
+                    page_slug = page_slug = game_offer["productSlug"]
                     try:
                         # May note be present
                         page_slug = next(iter(game_offer["catalogNs"]["mappings"]))[
@@ -64,29 +100,11 @@ class EpicGamesCrawler(ICrawler):
                     except Exception:
                         pass
 
-                    if page_slug is None:
-                        logger.warning(
-                            f"Couldn't find the page slug, it's likely a Mystery Game, title={game_offer['title']!r}"
-                        )
-                        logger.debug(f"game_offer={game_offer}")
-                        continue
+                    # todo: remove original_price_fmt (None) since it's not trustable due to mystery games having 0 as original price
 
-                    offer_dates = next(
-                        iter(
-                            next(iter(game_offer["promotions"]["promotionalOffers"]))[
-                                "promotionalOffers"
-                            ]
-                        )
-                    )
-
-                    offer_start_date = (
-                        parse_epic_games_datetime(offer_dates["startDate"]).timestamp()
-                        if offer_dates.get("startDate", None)
-                        else Datetime.now(datetime.UTC)
-                        .replace(microsecond=0)
-                        .timestamp()
-                    )
-                    offer_end_date = parse_epic_games_datetime(offer_dates["endDate"])
+                    assert offer_dates is not None
+                    assert offer_start_date is not None
+                    assert offer_end_date is not None
 
                     offer_list.append(
                         GameOffer(
@@ -119,7 +137,14 @@ class EpicGamesCrawler(ICrawler):
                             ),
                         )
                     )
-            except Exception as e:
-                logger.error("Failed to parse game offer", e)
+                else:
+                    logger.info(
+                        f"Skipping non-active game offer, {game_offer.get('title')!r}"
+                    )
+                    logger.debug(
+                        f"Non-active game offer details,\ngame_offer={game_offer}"
+                    )
+            except Exception:
+                logger.exception(f"Failed to parse game offer\ngame_offer={game_offer}")
 
         return offer_list
