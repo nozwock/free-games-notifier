@@ -61,11 +61,14 @@ jobs:
           name: State Latest
           files: .state/history.json
 
-  keepalive-job:
-    name: Keepalive Workflow
-    runs-on: ubuntu-latest
-    permissions:
-      actions: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: gautamkrishnar/keepalive-workflow@v2
+  # TODO: Have some alternatvie ready
+  # Github, please just let this be :(
+  # It's not much of a workload...
+  # keepalive-job:
+  #   name: Keepalive Workflow
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     actions: write
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: gautamkrishnar/keepalive-workflow@v2
