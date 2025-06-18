@@ -5,8 +5,6 @@ Get notified whenever a game becomes free on a platform.
 > [!NOTE]
 > Currently only supports Epic Games Store.
 
-Made this because, while some platforms provide notifications for such events, they often lack granularity.
-
 <img src="https://github.com/user-attachments/assets/8a179053-c685-40a6-8d27-64c059dcfdbb" width="280px">
 
 # Usage
