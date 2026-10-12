@@ -8,7 +8,7 @@ authors = [
 ]
 requires-python = ">=3.13"
 dependencies = [
-    "apprise",
+    "apprise>=2.0",
     "click>=8.1",
     "dynaconf>=3.3",
     "fake-useragent>=2.2",
@@ -25,7 +25,3 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = ["types-requests>=2.32.0.20250306"]
-
-[tool.uv.sources]
-# https://github.com/caronc/apprise/issues/1308
-apprise = { git = "https://github.com/nozwock/apprise", rev = "61c3f06797e8da571829ad51b33c908213afd743" }
