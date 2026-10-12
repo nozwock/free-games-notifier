@@ -15,7 +15,7 @@ from free_games_notifier.notify import (
     set_server_list_defaults,
     set_server_list_notify_params,
 )
-from free_games_notifier.utils import storefront_fmt, strip_query_params
+from free_games_notifier.utils import strip_query_params
 
 from .config import settings
 
@@ -53,7 +53,7 @@ def cli(apprise_url, notif_history):
     set_server_list_defaults(server_list)
 
     game_offers: list[GameOffer] = []
-    for crawler in map(lambda it: it(), crawlers.get_all_crawlers()):
+    for crawler in (it() for it in crawlers.get_all_crawlers()):
         try:
             logger.info(f"Running crawler from {type(crawler).__name__!r}")
             if game_offer := crawler.crawl():

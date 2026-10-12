@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import datetime
 import hashlib
 import json
 from pathlib import Path
@@ -11,10 +10,8 @@ from pydantic.v1.utils import deep_update
 
 from free_games_notifier.model import (
     GameOffer,
-    GameUrl,
     NotificationHistoryV1,
     NotificationHistoryV1Validator,
-    PlatformStr,
 )
 from free_games_notifier.utils import strip_query_params, unixtime2iso
 

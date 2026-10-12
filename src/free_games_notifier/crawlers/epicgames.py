@@ -31,7 +31,7 @@ class EpicGamesCrawler(ICrawler):
         try:
             resp.raise_for_status()
         except requests.RequestException as e:
-            logger.error("Failed to get free promotions list from Epic Games", e)
+            logger.error("Failed to get free promotions list from Epic Games: %s", e)
             return
 
         offer_list: list[GameOffer] = []
@@ -41,7 +41,7 @@ class EpicGamesCrawler(ICrawler):
             game_offers = resp_data["data"]["Catalog"]["searchStore"]["elements"]
         except Exception as e:
             logger.error(
-                "Failed to parse the promotion list with an unknown structure", e
+                "Failed to parse the promotion list with an unknown structure: %s", e
             )
             return
 
@@ -76,8 +76,8 @@ class EpicGamesCrawler(ICrawler):
                         offer_end_date = parse_epic_games_datetime(
                             offer_dates["endDate"]
                         )
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.error(e)
 
                 is_offer_active = (
                     game_offer["price"]["totalPrice"]["discountPrice"] == 0
@@ -86,7 +86,7 @@ class EpicGamesCrawler(ICrawler):
                     >= Datetime.fromtimestamp(offer_start_date, datetime.UTC)
                 )
                 if is_offer_active:
-                    page_slug = page_slug = game_offer["productSlug"]
+                    page_slug = game_offer["productSlug"]
                     try:
                         # May note be present
                         page_slug = next(iter(game_offer["catalogNs"]["mappings"]))[
@@ -97,8 +97,8 @@ class EpicGamesCrawler(ICrawler):
                         )[
                             "pageSlug"
                         ]  # More priority since it's the correct one when both are present
-                    except Exception:
-                        pass
+                    except Exception as e:
+                        logger.error(e)
 
                     assert offer_dates is not None
                     assert offer_start_date is not None
@@ -116,9 +116,11 @@ class EpicGamesCrawler(ICrawler):
                                 if not (
                                     img_obj := next(
                                         filter(
-                                            lambda it: it["type"].lower() == "thumbnail"
-                                            or it["type"].lower()
-                                            == "DieselStoreFrontWide".lower(),  # Mystery Games
+                                            lambda it: (
+                                                it["type"].lower() == "thumbnail"
+                                                or it["type"].lower()
+                                                == "DieselStoreFrontWide".lower()
+                                            ),  # Mystery Games
                                             game_offer["keyImages"],
                                         ),
                                         None,
