@@ -113,11 +113,6 @@ dependencies = [
     { name = "requests" },
 ]
 
-[package.dev-dependencies]
-dev = [
-    { name = "types-requests" },
-]
-
 [package.metadata]
 requires-dist = [
     { name = "apprise", specifier = ">=2.0" },
@@ -127,9 +122,6 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.14" },
     { name = "requests", specifier = ">=2.34" },
 ]
-
-[package.metadata.requires-dev]
-dev = [{ name = "types-requests", specifier = ">=2.32.0.20250306" }]
 
 [[package]]
 name = "idna"
@@ -303,18 +295,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/42/f2/05f29bc3913aea15eb670be136045bf5c5bbf4b99ecb839da9b422bb2c85/requests-oauthlib-2.0.0.tar.gz", hash = "sha256:b3dffaebd884d8cd778494369603a9e7b58d29111bf6b41bdc2dcd87203af4e9", size = 55650, upload-time = "2024-03-22T20:32:29.939Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/3b/5d/63d4ae3b9daea098d5d6f5da83984853c1bbacd5dc826764b249fe119d24/requests_oauthlib-2.0.0-py2.py3-none-any.whl", hash = "sha256:7dd8a5c40426b779b0868c404bdef9768deccf22749cde15852df527e6269b36", size = 24179, upload-time = "2024-03-22T20:32:28.055Z" },
-]
-
-[[package]]
-name = "types-requests"
-version = "2.32.0.20250306"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "urllib3" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/09/1a/beaeff79ef9efd186566ba5f0d95b44ae21f6d31e9413bcfbef3489b6ae3/types_requests-2.32.0.20250306.tar.gz", hash = "sha256:0962352694ec5b2f95fda877ee60a159abdf84a0fc6fdace599f20acb41a03d1", size = 23012, upload-time = "2025-03-06T02:49:21.823Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/99/26/645d89f56004aa0ba3b96fec27793e3c7e62b40982ee069e52568922b6db/types_requests-2.32.0.20250306-py3-none-any.whl", hash = "sha256:25f2cbb5c8710b2022f8bbee7b2b66f319ef14aeea2f35d80f18c9dbf3b60a0b", size = 20673, upload-time = "2025-03-06T02:49:18.333Z" },
 ]
 
 [[package]]
