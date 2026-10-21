@@ -78,7 +78,7 @@ def send_termux_notification(game_offer: GameOffer) -> bool:
             )
             return False
         return True
-    except Exception as e:
+    except (subprocess.SubprocessError, OSError) as e:
         logger.error("Failed to execute termux-notification: %s", e)
         return False
 
@@ -234,7 +234,7 @@ def schedule_termux_job(
     if existing_id is not None and job_id != existing_id:
         try:
             cancel_termux_job(existing_id)
-        except Exception as e:
+        except (RuntimeError, subprocess.SubprocessError, OSError) as e:
             logger.debug(f"Failed to cancel existing job {existing_id}: {e}")
 
     if job_id is not None:

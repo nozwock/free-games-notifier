@@ -1,4 +1,5 @@
 import datetime
+import subprocess
 from copy import deepcopy
 from logging import getLogger
 from pathlib import Path
@@ -77,7 +78,7 @@ def run_notifier(apprise_url: tuple[str, ...], notif_history: Path | None) -> No
             logger.info(f"Running crawler from {type(crawler).__name__!r}")
             if game_offer := crawler.crawl():
                 game_offers.extend(game_offer)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(e)
 
     notification_history = (
@@ -277,8 +278,8 @@ def schedule_add(
                 f"  Script: {generated_script}\n"
                 f"  Log: {log_file}\n"
             )
-        except Exception as e:
-            raise click.ClickException(str(e))
+        except (RuntimeError, ValueError, subprocess.SubprocessError, OSError) as e:
+            raise click.ClickException(str(e)) from e
 
 
 @schedule_group.command("cancel")
@@ -311,7 +312,7 @@ def schedule_cancel(scheduler: str) -> None:
             try:
                 cancel_termux_job(job_id=stored_job_id)
                 click.echo(f"Successfully cancelled Termux job (ID: {stored_job_id}).")
-            except Exception as e:
+            except (RuntimeError, subprocess.SubprocessError, OSError) as e:
                 click.echo(f"Failed to cancel Termux job: {e}", err=True)
         else:
             raise click.ClickException(
@@ -354,7 +355,7 @@ def schedule_status(scheduler: str) -> None:
                 jobs = get_pending_termux_jobs().strip()
                 if jobs:
                     click.echo(f"\nPending jobs:\n{jobs}")
-            except Exception as e:
+            except (RuntimeError, subprocess.SubprocessError, OSError) as e:
                 click.echo(f"Failed to get Termux job status: {e}", err=True)
         else:
             raise click.ClickException(

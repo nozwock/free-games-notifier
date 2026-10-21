@@ -52,7 +52,7 @@ class NotificationHistory:
                 NotificationHistory.hash_server_url(server_url)
             ][game_offer.url][unixtime2iso(game_offer.offer_start_unix)]
             return True
-        except Exception:
+        except (KeyError, TypeError):
             return False
 
     def add_history(
