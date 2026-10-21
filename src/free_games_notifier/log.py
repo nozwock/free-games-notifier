@@ -10,8 +10,6 @@ import sys
 from pathlib import Path
 from typing import TextIO
 
-from free_games_notifier.config import DIST_NAME
-
 
 class Color:
     ERROR = "\033[31m"  # Red
