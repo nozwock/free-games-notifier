@@ -24,12 +24,12 @@ settings = Dynaconf(
         Validator(
             "notif_history",
             cast=Path,
-            required=True,
+            default=CACHE_DIR / "history.json",
         ),
         Validator(
             "loglevel",  # FGN_LOGLEVEL
             cast=lambda s: s.upper(),
-            required=True,
+            default="INFO",
         ),
         Validator(
             "ignore_history",
