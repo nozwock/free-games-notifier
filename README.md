@@ -42,8 +42,14 @@ FGN_APPRISE_URLS='[ "ntfy://my_secret_topic" ]'
 
 #### Native Android Notifications (Termux):
 
-> [!NOTE]
-> For Android notifications, install the [Termux:API] and run `pkg install termux-api` inside [Termux]. Tapping the notification automatically opens the game's page in your default browser.
+> [!IMPORTANT]
+> **Prerequisites**:
+> 1. Install the **[Termux:API]** app and then the following package in [Termux]:
+>    ```bash
+>    pkg install termux-api
+>    ```
+> 2. Grant **"Display over other apps"** to **Termux** in Settings.
+>    Required on Android 10+ so background notifications clicks can open URLs in browser ([details](https://github.com/termux/termux-tasker#draw-over-apps-permission-optional)).
 
 <!-- https://github.com/pydantic/pydantic-core/issues/1012#issuecomment-2511269688 -->
 1. Install package on Termux:
