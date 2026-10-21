@@ -9,24 +9,9 @@ Get notified whenever a game becomes free on a platform.
 
 ## Usage
 
-### Hands-Free
-The project's scheduled GitHub Action automatically broadcasts free game notifications to a [ntfy.sh] public topic.
-
-To start receiving notifications, install the [ntfy][ntfy.sh] app from the Play Store or App Store and subscribe to the following topic:
-```
-free-games-public-yo69xlrfm
-```
-
-> [!IMPORTANT]
-> Since this uses a public `ntfy` topic, anyone can send messages to it. However, I kindly ask that no one spams the topic to keep it useful for everyone who relies on it.
-
-### Manual
-
 The program supports sending notifications through various services provided by [caronc/apprise](https://github.com/caronc/apprise).
 
-You can run the program either locally, scheduling it with a cron job, or by forking the project and using the existing GitHub Action workflow.
-
-#### Installation
+### Installation
 
 You can install the package using [uv] (recommended), or alternatives like `pipx`:
 
@@ -34,7 +19,7 @@ You can install the package using [uv] (recommended), or alternatives like `pipx
 uv tool install git+https://github.com/nozwock/free-games-notifier
 ```
 
-#### Configuration
+### Configuration
 To configure notifications, specify the services using [Apprise Service URI](https://github.com/caronc/apprise?tab=readme-ov-file#productivity-based-notifications).
 
 This can be done in two ways:
@@ -48,7 +33,10 @@ apprise_urls = [ "ntfy://my_secret_topic" ]
 FGN_APPRISE_URLS='[ "ntfy://my_secret_topic" ]'
 ```
 
-#### Scheduling
+> [!TIP]
+> If using [ntfy.sh], install the [ntfy][ntfy.sh] app from the Play Store, App Store, or F-Droid and subscribe to your secret topic to receive notifications on your devices.
+
+### Scheduling
 
 You can schedule periodic checks by editing your crontab with `crontab -e`:
 
