@@ -8,7 +8,7 @@ import apprise
 import click
 
 from free_games_notifier import crawlers
-from free_games_notifier.config import DATA_DIR, DIST_NAME, settings
+from free_games_notifier.config import CACHE_DIR, DIST_NAME, settings
 from free_games_notifier.history import NotificationHistory
 from free_games_notifier.log import setup_logging
 from free_games_notifier.model import GameOffer
@@ -226,7 +226,7 @@ def schedule_group() -> None:
     "--log-file",
     type=Path,
     default=None,
-    help=f"Log file path for background runner output (default: $XDG_DATA_HOME/{DIST_NAME}/job.log).",
+    help=f"Log file path for background runner output (default: $XDG_CACHE_HOME/{DIST_NAME}/job.log).",
 )
 def schedule_add(
     scheduler: str,
@@ -254,7 +254,7 @@ def schedule_add(
             script_path = Path.home() / ".local" / "share" / DIST_NAME / "job.sh"
 
     if log_file is None:
-        log_file = DATA_DIR / "job.log"
+        log_file = CACHE_DIR / "job.log"
 
     generated_script = generate_job_script(
         script_path=script_path,
