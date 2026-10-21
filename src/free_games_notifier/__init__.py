@@ -1,4 +1,5 @@
 import datetime
+import logging
 from copy import deepcopy
 from logging import getLogger
 from pathlib import Path
@@ -49,7 +50,7 @@ def run_notifier(apprise_url: tuple[str, ...], notif_history: Path | None) -> No
         }
     )
 
-    setup_logging(logger=logger, loglevel=cast(str, settings.loglevel))
+    setup_logging(level=cast(str, settings.loglevel))
 
     is_ignore_history = cast(dict, settings).get("ignore_history", False)
     is_reset_history = cast(dict, settings).get("reset_history", False)
