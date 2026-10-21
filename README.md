@@ -45,12 +45,20 @@ FGN_APPRISE_URLS='[ "ntfy://my_secret_topic" ]'
 > [!NOTE]
 > For Android notifications, install the [Termux:API] and run `pkg install termux-api` inside [Termux]. Tapping the notification automatically opens the game's page in your default browser.
 
-1. Use termux as notifier in `settings.toml`:
+<!-- https://github.com/pydantic/pydantic-core/issues/1012#issuecomment-2511269688 -->
+1. Install package on Termux:
+```bash
+uv tool install \
+    --extra-index-url https://termux-user-repository.github.io/pypi/ \
+    git+https://github.com/nozwock/free-games-notifier
+```
+
+2. Use termux as notifier in `~/.config/settings.toml`:
 ```toml
 apprise_urls = [ "termux://" ]
 ```
 
-2. Setup schedular:
+3. Setup schedular:
 ```bash
 # Check once a day
 free-games-notifier schedule -i 1d
