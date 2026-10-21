@@ -40,6 +40,22 @@ apprise_urls = [ "ntfy://my_secret_topic" ]
 FGN_APPRISE_URLS='[ "ntfy://my_secret_topic" ]'
 ```
 
+#### Native Android Notifications (Termux):
+
+> [!NOTE]
+> For Android notifications, install the [Termux:API] and run `pkg install termux-api` inside [Termux]. Tapping the notification automatically opens the game's page in your default browser.
+
+1. Use termux as notifier in `settings.toml`:
+```toml
+apprise_urls = [ "termux://" ]
+```
+
+2. Setup schedular:
+```bash
+# Check once a day
+free-games-notifier schedule -i 1d
+```
+
 ---
 
 ### Related Projects
@@ -49,3 +65,5 @@ FGN_APPRISE_URLS='[ "ntfy://my_secret_topic" ]'
 - [sh13y/epic-free-games-notifier](https://github.com/sh13y/epic-free-games-notifier)
 
 [ntfy.sh]: <https://ntfy.sh/>
+[termux]: https://github.com/termux/termux-app
+[termux:api]: https://github.com/termux/termux-api

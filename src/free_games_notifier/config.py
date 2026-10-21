@@ -3,6 +3,7 @@ from pathlib import Path
 from dynaconf import Dynaconf, Validator
 from platformdirs import user_cache_dir, user_config_dir, user_data_dir
 
+DIST_NAME = "free-games-notifier"
 DATA_DIR = Path(user_data_dir(DIST_NAME))
 CONFIG_DIR = Path(user_config_dir(DIST_NAME))
 CACHE_DIR = Path(user_cache_dir(DIST_NAME))
