@@ -12,6 +12,7 @@ dependencies = [
     "click>=8.1",
     "dynaconf>=3.3",
     "fake-useragent>=2.2",
+    "platformdirs>=4.13.5",
     "pydantic>=2.14",
     "requests>=2.34",
 ]

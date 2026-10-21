@@ -1,10 +1,20 @@
 from pathlib import Path
 
 from dynaconf import Dynaconf, Validator
+from platformdirs import user_cache_dir, user_config_dir, user_data_dir
+
+DATA_DIR = Path(user_data_dir(DIST_NAME))
+CONFIG_DIR = Path(user_config_dir(DIST_NAME))
+CACHE_DIR = Path(user_cache_dir(DIST_NAME))
 
 settings = Dynaconf(
     envvar_prefix="FGN",
-    settings_files=["settings.toml", ".secrets.toml"],
+    settings_files=[
+        CONFIG_DIR / "settings.toml",
+        CONFIG_DIR / ".secrets.toml",
+        "settings.toml",
+        ".secrets.toml",
+    ],
     validators=[
         Validator(
             "apprise_urls",  # FGN_APPRISE_URLS as an envvar
